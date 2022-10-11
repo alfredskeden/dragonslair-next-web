@@ -17,8 +17,8 @@ const TextArea = ({ onSetValue }: Props) => {
   return (
     <Flex direction="column" alignItems="center">
       <Textarea
-        placeholder={`1 Esper Sentinel\n1 Rhystic Stydy...`}
-        width="500px"
+        placeholder={`1 Esper Sentinel\n1 Rhystic Study...`}
+        width={["300px", "400px", "550px"]}
         rows={7}
         onChange={handleChange}
         value={text}

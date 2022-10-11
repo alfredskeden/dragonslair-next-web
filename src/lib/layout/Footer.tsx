@@ -4,13 +4,12 @@ const Footer = () => {
   return (
     <Flex as="footer" width="full" justifyContent="center" mt="auto">
       <Text fontSize="sm" color="gray.500">
-        {new Date().getFullYear()} -{" "}
         <Link
           href="https://github.com/alfredskeden"
           isExternal
           rel="noopener noreferrer"
         >
-          alfredskeden
+          <u>{new Date().getFullYear()} - alfredskeden</u>
         </Link>
       </Text>
     </Flex>
