@@ -62,16 +62,21 @@ const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
       );
 
       const rows = infoResponse.data.response.rows
-        .filter((x: any) => x.Tags.some((s: string) => s === "magic"))
+        .filter((x: { Tags: Array<string> }) =>
+          x.Tags.some((s: string) => s === "magic")
+        )
         .sort(
           (a: { Popularity: number }, b: { Popularity: number }) =>
             a.Popularity - b.Popularity
         );
 
-      const avail: number = rows.reduce((acc: number, row: any) => {
-        acc += row.PrimaryAvailable;
-        return acc;
-      }, 0);
+      const avail: number = rows.reduce(
+        (acc: number, row: { PrimaryAvailable: number }) => {
+          acc += row.PrimaryAvailable;
+          return acc;
+        },
+        0
+      );
 
       const { url } = infoResponse.data.response;
 
@@ -229,7 +234,7 @@ const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
               <Tbody>
                 {info.items?.map((item) => {
                   return (
-                    <Tr>
+                    <Tr key={item.name}>
                       <Td>
                         <Link
                           href={`https://dragonslair.se${item.URL}`}
