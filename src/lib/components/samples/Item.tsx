@@ -143,7 +143,7 @@ const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>{info.name} info</ModalHeader>
-            <Flex>// TODO TOMOORW IS TO FIX THIS MOBILE MODAL VIEW</Flex>
+            <Flex>{/* TODO TOMOORW IS TO FIX THIS MOBILE MODAL VIEW */}</Flex>
             <ModalFooter>
               <Button onClick={onClose}>Close</Button>
             </ModalFooter>

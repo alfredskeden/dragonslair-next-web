@@ -81,14 +81,14 @@ const Home = () => {
           </Table>
         </TableContainer>
       ) : (
-        <>
+        <Flex>
           {savedValue.length > 0 && savedValue[0] !== "" ? (
             savedValue.map((value) => {
               if (!value) return null;
               return (
                 <Item
                   name={value}
-                  key={`${value}-item`}
+                  key={`${value}-item-mobile`}
                   hideOutOfStock={hideOutOfStock}
                   isMobile={isMobile}
                 />
@@ -97,7 +97,7 @@ const Home = () => {
           ) : (
             <Flex>Please search for items above.</Flex>
           )}
-        </>
+        </Flex>
       )}
     </Flex>
   );
