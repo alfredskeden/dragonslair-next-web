@@ -18,10 +18,12 @@ function runMiddleware(
   fn: (
     req: NextApiRequest,
     res: NextApiResponse,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dd: (result: any) => void
   ) => void
 ) {
   return new Promise((resolve, reject) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fn(req, res, (result: any) => {
       if (result instanceof Error) {
         return reject(result);
