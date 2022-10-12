@@ -16,6 +16,7 @@ import { useState } from "react";
 import HeaderText from "../../components/samples/HeaderText";
 import TextArea from "../../components/samples/TextArea";
 import Item from "../../components/samples/Item";
+import InputField from "../../components/samples/InputField";
 
 const headers = ["(rows)", "img", "Name", "Stock", "Price"];
 
@@ -24,10 +25,15 @@ const Home = () => {
   const [hideOutOfStock, setHideOutOfStock] = useState<boolean>(false);
   const [isMobile] = useMediaQuery("(max-width: 669px)");
 
+  const addSingleSearchValue = (text: string) => {
+    setSavedValue((r) => [...r, text]);
+  };
+
   return (
     <Flex direction="column" minHeight="80vh" gap={4}>
       <NextSeo title="Dragonslair mgt stock and price scanner" />
       <HeaderText />
+      <InputField onSetValue={addSingleSearchValue} />
       <TextArea onSetValue={setSavedValue} />
       <Checkbox
         alignSelf="center"
@@ -81,7 +87,7 @@ const Home = () => {
           </Table>
         </TableContainer>
       ) : (
-        <Flex>
+        <>
           {savedValue.length > 0 && savedValue[0] !== "" ? (
             savedValue.map((value) => {
               if (!value) return null;
@@ -97,7 +103,7 @@ const Home = () => {
           ) : (
             <Flex>Please search for items above.</Flex>
           )}
-        </Flex>
+        </>
       )}
     </Flex>
   );

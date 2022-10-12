@@ -9,7 +9,7 @@ const HeaderText = () => {
           isExternal
           rel="noopener noreferrer"
         >
-          <u>Dragonslair</u>
+          <u>Dragonslair.se</u>
         </Link>{" "}
         price and stock runner.
       </Heading>

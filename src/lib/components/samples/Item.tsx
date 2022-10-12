@@ -20,10 +20,12 @@ import {
   Spinner,
   Tr,
   Td,
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { AiOutlineCamera } from "react-icons/ai";
 import dayjs from "dayjs";
+import { DragonLairApi, RowsEntity } from "lib/types/dragonlair-api";
 
 type ItemProps = {
   name: string;
@@ -42,12 +44,14 @@ type Product = {
 };
 
 type Items = {
+  id: string;
   name: string;
   itemsAvail: number;
   price: number;
-  buyInPrice: number;
+  buyInPrice: string;
   RecentByStore: string;
   URL: string;
+  imageId: string;
 };
 
 const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
@@ -57,26 +61,23 @@ const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
 
   useEffect(() => {
     async function getItemInfo() {
-      const infoResponse = await axios.get(
+      const infoResponse = await axios.get<DragonLairApi>(
         `/api/fetch-item?name=${name.split(" ").join("+")}`
       );
 
-      const rows = infoResponse.data.response.rows
-        .filter((x: { Tags: Array<string> }) =>
-          x.Tags.some((s: string) => s === "magic")
-        )
-        .sort(
-          (a: { Popularity: number }, b: { Popularity: number }) =>
-            a.Popularity - b.Popularity
-        );
+      const rows =
+        infoResponse.data.response.rows
+          ?.filter((x: RowsEntity) =>
+            x.Tags?.some((s: string) => s === "magic")
+          )
+          .sort(
+            (a: RowsEntity, b: RowsEntity) => b.Popularity - a.Popularity
+          ) ?? [];
 
-      const avail: number = rows.reduce(
-        (acc: number, row: { PrimaryAvailable: number }) => {
-          acc += row.PrimaryAvailable;
-          return acc;
-        },
-        0
-      );
+      const avail: number = rows.reduce((acc: number, row: RowsEntity) => {
+        acc += row.PrimaryAvailable;
+        return acc;
+      }, 0);
 
       const { url } = infoResponse.data.response;
 
@@ -87,14 +88,16 @@ const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
         name: rows[0].Name,
         totalSerches: rows.length,
         imageId: rows[0].ImageId,
-        items: rows.map((row: any) => {
+        items: rows.map((row: RowsEntity) => {
           return {
+            id: row.Id,
             name: row.Name,
             itemsAvail: row.PrimaryAvailable,
             price: row.Price,
             buyInPrice: row.BuyinPrice,
             RecentByStore: row.RecentByStore["1"],
             URL: row.URL,
+            imageId: row.ImageId,
           };
         }),
       };
@@ -148,7 +151,47 @@ const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>{info.name} info</ModalHeader>
-            <Flex>{/* TODO TOMOORW IS TO FIX THIS MOBILE MODAL VIEW */}</Flex>
+            <ModalCloseButton />
+            <Flex flexDirection="column">
+              {info.items?.map((item) => {
+                return (
+                  <Flex key={item.id} padding={5}>
+                    <Flex flexDirection="column" width="50%">
+                      <Link
+                        href={`https://dragonslair.se${item.URL}`}
+                        isExternal
+                        rel="noopener noreferrer"
+                      >
+                        <u>{item.name}</u>
+                      </Link>
+                      <Flex flexDirection="column" mt="auto" gap={2}>
+                        <Text
+                          color={!item.itemsAvail ? "red.300" : "green.300"}
+                        >
+                          {item.itemsAvail} pc
+                        </Text>
+                        <Button
+                          onClick={onOpen}
+                          variant="link"
+                          justifyContent="start"
+                        >
+                          <u>
+                            {!item.price ? "Not set" : `~ ${item.price} kr`}
+                          </u>
+                        </Button>
+                      </Flex>
+                    </Flex>
+                    <Flex width="50%">
+                      <Image
+                        src={`https://dragonslair.se/images/${item.imageId}/product`}
+                        alt={item.name}
+                        fallbackSrc="/image-not-found.png"
+                      />
+                    </Flex>
+                  </Flex>
+                );
+              })}
+            </Flex>
             <ModalFooter>
               <Button onClick={onClose}>Close</Button>
             </ModalFooter>
