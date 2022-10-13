@@ -6,10 +6,10 @@ const Header = () => {
   return (
     <Flex as="header" align="center">
       <Flex direction="column">
-        <Heading as="h1">
+        <Heading as="h1" size={["xl", "xl", "xl"]}>
           <Link href="/">Singles MTG</Link>
         </Heading>
-        <Heading as="h2" size="md">
+        <Heading as="h2" size={["xs", "xs", "md"]}>
           <Link
             href="https://dragonslair.se/"
             isExternal

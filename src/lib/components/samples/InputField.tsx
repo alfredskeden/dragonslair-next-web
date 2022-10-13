@@ -46,6 +46,17 @@ const InputField = ({ onSetValue }: Props) => {
         `/api/fetch-item?name=${debouncedValue.split(" ").join("+")}`
       );
 
+      if (infoResponse.status !== 200) {
+        toast({
+          title: "Error fetching data",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        setLoading(false);
+        return;
+      }
+
       const rows =
         infoResponse.data.response.rows?.filter((row) => {
           return row.Tags?.some((x) => x === "magic");

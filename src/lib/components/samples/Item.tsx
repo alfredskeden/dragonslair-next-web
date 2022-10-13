@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { DragonLairApi, RowsEntity } from "lib/types/dragonlair-api";
 import ItemMobile from "./components/ItemMobile";
 import ItemDesktop from "./components/ItemDesktop";
+import { useToast } from "@chakra-ui/react";
 
 type ItemProps = {
   name: string;
@@ -35,12 +36,24 @@ type Items = {
 const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
   const [info, setInfo] = useState<Product>({ name });
   const [loading, setLoading] = useState<boolean>(true);
+  const toast = useToast();
 
   useEffect(() => {
     async function getItemInfo() {
       const infoResponse = await axios.get<DragonLairApi>(
         `/api/fetch-item?name=${name.split(" ").join("+")}`
       );
+
+      if (infoResponse.status !== 200) {
+        toast({
+          title: "Error fetching data",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        setLoading(false);
+        return;
+      }
 
       const rows =
         infoResponse.data.response.rows
