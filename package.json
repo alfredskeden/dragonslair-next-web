@@ -1,21 +1,13 @@
 {
-  "name": "nextarter-chakra",
+  "name": "singlesmtg-next-web",
   "version": "0.1.0",
   "private": true,
-  "author": "sozonome",
+  "author": "alfredskeden",
   "scripts": {
     "dev": "next dev -p 4446",
     "build": "next build",
     "postbuild": "next-sitemap --config next-sitemap.config.js",
-    "start": "next start -p 5174",
-    "lint": "next lint",
-    "lint:fix": "eslint src --fix && yarn format",
-    "type-check": "tsc --noEmit",
-    "format": "prettier --write src",
-    "up": "yarn upgrade-interactive",
-    "up-latest": "yarn up --latest",
-    "release": "cross-env HUSKY=0 standard-version",
-    "push-release": "git push --follow-tags origin main"
+    "start": "next start -p 5174"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.3.4",
