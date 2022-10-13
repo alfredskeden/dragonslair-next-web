@@ -18,7 +18,18 @@ import TextArea from "../../components/samples/TextArea";
 import Item from "../../components/samples/Item";
 import InputField from "../../components/samples/InputField";
 
-const headers = ["(rows)", "img", "Name", "Stock", "Price"];
+type TableHeader = {
+  label: string;
+  isNumeric?: boolean;
+};
+
+const headers: Array<TableHeader> = [
+  { label: "(rows)" },
+  { label: "img" },
+  { label: "Name" },
+  { label: "Stock", isNumeric: true },
+  { label: "Price", isNumeric: true },
+];
 
 const Home = () => {
   const [savedValue, setSavedValue] = useState<Array<string>>([]);
@@ -48,8 +59,11 @@ const Home = () => {
               <Tr>
                 {headers.map((header, index) => {
                   return (
-                    <Th key={`${header}-header-table`}>
-                      {index === 0 ? savedValue.length : ""} {header}
+                    <Th
+                      key={`${header.label}-header-table`}
+                      isNumeric={header.isNumeric}
+                    >
+                      {index === 0 ? savedValue.length : ""} {header.label}
                     </Th>
                   );
                 })}
@@ -80,7 +94,14 @@ const Home = () => {
             <Tfoot>
               <Tr>
                 {headers.map((header) => {
-                  return <Th key={`${header}-footer-table`}>{header}</Th>;
+                  return (
+                    <Th
+                      key={`${header.label}-footer-table`}
+                      isNumeric={header.isNumeric}
+                    >
+                      {header.label}
+                    </Th>
+                  );
                 })}
               </Tr>
             </Tfoot>

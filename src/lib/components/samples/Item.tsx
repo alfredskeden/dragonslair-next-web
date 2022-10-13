@@ -1,31 +1,9 @@
 import axios from "axios";
-import {
-  Button,
-  Flex,
-  Image,
-  Link,
-  Modal,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Table,
-  TableContainer,
-  Tbody,
-  Text,
-  Th,
-  Thead,
-  Tooltip,
-  useDisclosure,
-  Spinner,
-  Tr,
-  Td,
-  ModalCloseButton,
-} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { AiOutlineCamera } from "react-icons/ai";
-import dayjs from "dayjs";
+
 import { DragonLairApi, RowsEntity } from "lib/types/dragonlair-api";
+import ItemMobile from "./components/ItemMobile";
+import ItemDesktop from "./components/ItemDesktop";
 
 type ItemProps = {
   name: string;
@@ -33,13 +11,13 @@ type ItemProps = {
   isMobile?: boolean;
 };
 
-type Product = {
+export type Product = {
   avail?: number;
   items?: Array<Items>;
   lowestHref?: string;
   lowestPrice?: number;
   name: string;
-  totalSerches?: number;
+  totalSearches?: number;
   imageId?: string;
 };
 
@@ -57,7 +35,6 @@ type Items = {
 const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
   const [info, setInfo] = useState<Product>({ name });
   const [loading, setLoading] = useState<boolean>(true);
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     async function getItemInfo() {
@@ -86,7 +63,7 @@ const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
         lowestHref: url,
         lowestPrice: rows[0].Price,
         name: rows[0].Name,
-        totalSerches: rows.length,
+        totalSearches: rows.length,
         imageId: rows[0].ImageId,
         items: rows.map((row: RowsEntity) => {
           return {
@@ -110,206 +87,10 @@ const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
   if (!loading && !info.avail && hideOutOfStock) return null;
 
   if (isMobile) {
-    return (
-      <>
-        <Flex
-          rounded="2xl"
-          background="blackAlpha.100"
-          paddingY={4}
-          paddingX={6}
-          justifyContent="space-between"
-          gap={2}
-        >
-          <Flex flexDirection="column" width="50%">
-            <Link
-              href={`https://dragonslair.se${info.lowestHref}`}
-              isExternal
-              rel="noopener noreferrer"
-            >
-              <u>{info.name}</u>
-            </Link>
-            <Flex flexDirection="column" mt="auto" gap={2}>
-              <Text color={!info.avail ? "red.300" : "green.300"}>
-                {info.avail} pc
-              </Text>
-              <Button onClick={onOpen} variant="link" justifyContent="start">
-                <u>
-                  {!info.lowestPrice ? "Not set" : `~ ${info.lowestPrice} kr`}
-                </u>
-              </Button>
-            </Flex>
-          </Flex>
-          <Flex width="50%">
-            <Image
-              src={`https://dragonslair.se/images/${info.imageId}/product`}
-              alt={info.name}
-              fallbackSrc="/image-not-found.png"
-            />
-          </Flex>
-        </Flex>
-        <Modal isOpen={isOpen} onClose={onClose} size="full">
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>{info.name} info</ModalHeader>
-            <ModalCloseButton />
-            <Flex flexDirection="column">
-              {info.items?.map((item) => {
-                return (
-                  <Flex key={item.id} padding={5}>
-                    <Flex flexDirection="column" width="50%">
-                      <Link
-                        href={`https://dragonslair.se${item.URL}`}
-                        isExternal
-                        rel="noopener noreferrer"
-                      >
-                        <u>{item.name}</u>
-                      </Link>
-                      <Flex flexDirection="column" mt="auto" gap={2}>
-                        <Text
-                          color={!item.itemsAvail ? "red.300" : "green.300"}
-                        >
-                          {item.itemsAvail} pc
-                        </Text>
-                        <Button
-                          onClick={onOpen}
-                          variant="link"
-                          justifyContent="start"
-                        >
-                          <u>
-                            {!item.price ? "Not set" : `~ ${item.price} kr`}
-                          </u>
-                        </Button>
-                      </Flex>
-                    </Flex>
-                    <Flex width="50%">
-                      <Image
-                        src={`https://dragonslair.se/images/${item.imageId}/product`}
-                        alt={item.name}
-                        fallbackSrc="/image-not-found.png"
-                      />
-                    </Flex>
-                  </Flex>
-                );
-              })}
-            </Flex>
-            <ModalFooter>
-              <Button onClick={onClose}>Close</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    );
+    return <ItemMobile product={info} />;
   }
 
-  return (
-    <>
-      <Tr>
-        {loading ? (
-          <>
-            <Td />
-            <Td />
-            <Td>{name}</Td>
-            <Td>
-              <Spinner />
-            </Td>
-            <Td />
-          </>
-        ) : (
-          <>
-            <Td>({info.totalSerches})</Td>
-            <Td>
-              <Tooltip
-                placement="auto"
-                hasArrow
-                label={
-                  <Image
-                    src={`https://dragonslair.se/images/${info.imageId}/product`}
-                    alt={info.name}
-                    boxSize="400px"
-                    fallbackSrc="/image-not-found.png"
-                  />
-                }
-              >
-                <Flex>
-                  <AiOutlineCamera />
-                </Flex>
-              </Tooltip>
-            </Td>
-            <Td>
-              <Link
-                href={`https://dragonslair.se${info.lowestHref}`}
-                isExternal
-                rel="noopener noreferrer"
-              >
-                <u>{info.name}</u>
-              </Link>
-            </Td>
-            <Td textAlign="center">
-              <Text color={!info.avail ? "red.300" : "green.300"}>
-                {info.avail}
-              </Text>
-            </Td>
-            <Td textAlign="center">
-              <Button onClick={onOpen} variant="link">
-                <u>
-                  {!info.lowestPrice ? "Not set" : `~ ${info.lowestPrice} kr`}
-                </u>
-              </Button>
-            </Td>
-          </>
-        )}
-      </Tr>
-      <Modal isOpen={isOpen} onClose={onClose} size="6xl">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{info.name} info</ModalHeader>
-          <TableContainer>
-            <Table variant="striped" colorScheme="black">
-              <Thead>
-                <Tr>
-                  <Th>Name</Th>
-                  <Th isNumeric>Stock</Th>
-                  <Th isNumeric>Price</Th>
-                  <Th isNumeric>Buy Price</Th>
-                  <Th>Recent in store</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {info.items?.map((item) => {
-                  return (
-                    <Tr key={item.name}>
-                      <Td>
-                        <Link
-                          href={`https://dragonslair.se${item.URL}`}
-                          isExternal
-                          rel="noopener noreferrer"
-                        >
-                          <u>{item.name}</u>
-                        </Link>
-                      </Td>
-                      <Td isNumeric>
-                        <Text
-                          color={!item.itemsAvail ? "red.300" : "green.300"}
-                        >
-                          {item.itemsAvail}
-                        </Text>
-                      </Td>
-                      <Td isNumeric>{item.price ?? 0}</Td>
-                      <Td isNumeric>{item.buyInPrice}</Td>
-                      <Td>{dayjs(item.RecentByStore).format("YYYY-MMM-DD")}</Td>
-                    </Tr>
-                  );
-                })}
-              </Tbody>
-            </Table>
-          </TableContainer>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  );
+  return <ItemDesktop nameOG={name} loading={loading} product={info} />;
 };
 
 export default Item;

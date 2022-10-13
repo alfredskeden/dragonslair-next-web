@@ -7,7 +7,9 @@ import {
   PopoverAnchor,
   PopoverBody,
   PopoverContent,
+  Spinner,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { DragonLairApi, RowsEntity } from "lib/types/dragonlair-api";
@@ -21,9 +23,12 @@ type Props = {
 const InputField = ({ onSetValue }: Props) => {
   const [value, setValue] = useState<string>("");
   const [allRows, setAllRows] = useState<Array<RowsEntity>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const debouncedValue = useDebounce<string>(value, 500);
+  const toast = useToast();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
     setValue(event.target.value);
   };
 
@@ -45,6 +50,7 @@ const InputField = ({ onSetValue }: Props) => {
         }) ?? [];
 
       setAllRows(rows);
+      setLoading(false);
     }
 
     getSearchInfo();
@@ -54,7 +60,8 @@ const InputField = ({ onSetValue }: Props) => {
     <Flex flexDirection="column" alignItems="center">
       <Popover
         isOpen={!(!debouncedValue || debouncedValue.length < 3)}
-        size="669px"
+        autoFocus={false}
+        placement="bottom-start"
       >
         <PopoverAnchor>
           <Input
@@ -68,35 +75,43 @@ const InputField = ({ onSetValue }: Props) => {
         <PopoverContent>
           <PopoverBody>
             <Flex flexDirection="column" justifyContent="start">
-              {allRows.map((row) => {
-                return (
-                  <Flex key={row.Id} flexDirection="column" gap={4}>
-                    <Flex justifyContent="space-between">
-                      <Link
-                        onClick={() => {
-                          onSetValue(row.Name);
-                          setValue("");
-                        }}
-                      >
-                        <u>{row.Name}</u>
-                      </Link>
-                      <Flex gap={2}>
-                        <Text
-                          color={
-                            !row.PrimaryAvailable ? "red.300" : "green.300"
-                          }
+              {loading && <Spinner />}
+              {!allRows || (!allRows.length && <Text>No products found</Text>)}
+              {allRows.length > 0 &&
+                allRows.map((row) => {
+                  return (
+                    <Flex key={row.Id} flexDirection="column" gap={2}>
+                      <Flex justifyContent="space-between">
+                        <Link
+                          onClick={() => {
+                            onSetValue(row.Name);
+                            setValue("");
+                            toast({
+                              title: `${row.Name} Added`,
+                              status: "success",
+                              duration: 1000,
+                            });
+                          }}
                         >
-                          {row.PrimaryAvailable}
-                        </Text>
-                        <Text>
-                          {row.Price ? `${row.Price} kr` : "Not price"}
-                        </Text>
+                          <u>{row.Name}</u>
+                        </Link>
+                        <Flex gap={2}>
+                          <Text
+                            color={
+                              !row.PrimaryAvailable ? "red.300" : "green.300"
+                            }
+                          >
+                            {row.PrimaryAvailable} pc
+                          </Text>
+                          <Text>
+                            {row.Price ? `${row.Price} kr` : "Not priced"}
+                          </Text>
+                        </Flex>
                       </Flex>
+                      <Divider mb={2} />
                     </Flex>
-                    <Divider />
-                  </Flex>
-                );
-              })}
+                  );
+                })}
             </Flex>
           </PopoverBody>
         </PopoverContent>
