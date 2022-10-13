@@ -1,24 +1,13 @@
 /** @type {import('next-seo').DefaultSeoProps} */
 const defaultSEOConfig = {
-  title: "nextarter-chakra",
-  titleTemplate: "%s | nextarter-chakra",
+  title: "Dragonslair.se stock and prices",
+  titleTemplate: "%s",
   defaultTitle: "Scanner",
-  description: "Next.js + chakra-ui + TypeScript template",
-  canonical: "https://nextarter-chakra.sznm.dev",
-  openGraph: {
-    url: "https://nextarter-chakra.sznm.dev",
-    title: "Scanner",
-    description: "Next.js + chakra-ui + TypeScript template",
-    images: [
-      {
-        url: "https://og-image.sznm.dev/**nextarter-chakra**.sznm.dev.png?theme=dark&md=1&fontSize=125px&images=https%3A%2F%2Fsznm.dev%2Favataaars.svg&widths=250",
-        alt: "nextarter-chakra.sznm.dev og-image",
-      },
-    ],
-    site_name: "nextarter-chakra",
-  },
+  description:
+    "A page that uses Dragonslairs search api to display prices on multiple cards at the same time.",
+  canonical: "https://singlesmtg.com/",
   twitter: {
-    handle: "@sozonome",
+    handle: "@tophBF",
     cardType: "summary_large_image",
   },
 };

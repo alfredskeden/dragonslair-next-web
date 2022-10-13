@@ -1,10 +1,25 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link } from "@chakra-ui/react";
 
 import ThemeToggle from "./ThemeToggle";
 
 const Header = () => {
   return (
-    <Flex as="header" width="full" align="center">
+    <Flex as="header" align="center">
+      <Flex direction="column">
+        <Heading as="h1">
+          <Link href="/">Singles MTG</Link>
+        </Heading>
+        <Heading as="h2" size="md">
+          <Link
+            href="https://dragonslair.se/"
+            isExternal
+            rel="noopener noreferrer"
+          >
+            <u>Dragonslair.se</u>
+          </Link>{" "}
+          stock and prices.
+        </Heading>
+      </Flex>
       <Box marginLeft="auto">
         <ThemeToggle />
       </Box>

@@ -10,10 +10,14 @@ import {
   TableContainer,
   Checkbox,
   useMediaQuery,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
+  TabPanels,
 } from "@chakra-ui/react";
 import { NextSeo } from "next-seo";
 import { useState } from "react";
-import HeaderText from "../../components/samples/HeaderText";
 import TextArea from "../../components/samples/TextArea";
 import Item from "../../components/samples/Item";
 import InputField from "../../components/samples/InputField";
@@ -42,10 +46,21 @@ const Home = () => {
 
   return (
     <Flex direction="column" minHeight="80vh" gap={4}>
-      <NextSeo title="Dragonslair mgt stock and price scanner" />
-      <HeaderText />
-      <InputField onSetValue={addSingleSearchValue} />
-      <TextArea onSetValue={setSavedValue} />
+      <NextSeo title="Dragonslair.se stock and prices" />
+      <Tabs variant="enclosed">
+        <TabList>
+          <Tab>Single search</Tab>
+          <Tab>Multi search</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel paddingX={0} paddingTop={8}>
+            <InputField onSetValue={addSingleSearchValue} />
+          </TabPanel>
+          <TabPanel paddingTop={8}>
+            <TextArea onSetValue={setSavedValue} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
       <Checkbox
         alignSelf="center"
         onChange={(value) => setHideOutOfStock(value.target.checked)}

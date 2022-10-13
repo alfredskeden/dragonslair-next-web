@@ -9,12 +9,14 @@ import {
   PopoverContent,
   Spinner,
   Text,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { DragonLairApi, RowsEntity } from "lib/types/dragonlair-api";
 import { ChangeEvent, useEffect, useState } from "react";
 import useDebounce from "../../../../hooks/useDebounce";
+import ImagesMTG from "./components/ImagesMTG";
 
 type Props = {
   onSetValue: (text: string) => void;
@@ -65,14 +67,14 @@ const InputField = ({ onSetValue }: Props) => {
       >
         <PopoverAnchor>
           <Input
-            width={["300px", "400px", "550px"]}
+            width={"100%"}
             placeholder="Search singles"
             onChange={handleChange}
             value={value}
             type="search"
           />
         </PopoverAnchor>
-        <PopoverContent>
+        <PopoverContent boxSize="fit-content">
           <PopoverBody>
             <Flex flexDirection="column" justifyContent="start">
               {loading && <Spinner />}
@@ -81,20 +83,35 @@ const InputField = ({ onSetValue }: Props) => {
                 allRows.map((row) => {
                   return (
                     <Flex key={row.Id} flexDirection="column" gap={2}>
-                      <Flex justifyContent="space-between">
-                        <Link
-                          onClick={() => {
-                            onSetValue(row.Name);
-                            setValue("");
-                            toast({
-                              title: `${row.Name} Added`,
-                              status: "success",
-                              duration: 1000,
-                            });
-                          }}
-                        >
-                          <u>{row.Name}</u>
-                        </Link>
+                      <Flex justifyContent="space-between" gap={8}>
+                        <Flex gap={2}>
+                          <Tooltip
+                            hasArrow
+                            label={
+                              <Flex position="relative">
+                                <ImagesMTG
+                                  name={row.Name}
+                                  imageId={row.ImageId}
+                                  type={"grid"}
+                                />
+                              </Flex>
+                            }
+                          >
+                            <Link
+                              onClick={() => {
+                                onSetValue(row.Name);
+                                setValue("");
+                                toast({
+                                  title: `${row.Name} Added`,
+                                  status: "success",
+                                  duration: 1000,
+                                });
+                              }}
+                            >
+                              <u>{row.Name}</u>
+                            </Link>
+                          </Tooltip>
+                        </Flex>
                         <Flex gap={2}>
                           <Text
                             color={
