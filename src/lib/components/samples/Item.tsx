@@ -10,6 +10,7 @@ type ItemProps = {
   name: string;
   hideOutOfStock: boolean;
   isMobile?: boolean;
+  removeItem: (name: string) => void;
 };
 
 export type Product = {
@@ -33,7 +34,12 @@ type Items = {
   imageId: string;
 };
 
-const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
+const Item = ({
+  name,
+  hideOutOfStock,
+  isMobile = false,
+  removeItem,
+}: ItemProps) => {
   const [info, setInfo] = useState<Product>({ name });
   const [loading, setLoading] = useState<boolean>(true);
   const toast = useToast();
@@ -100,10 +106,19 @@ const Item = ({ name, hideOutOfStock, isMobile = false }: ItemProps) => {
   if (!loading && !info.avail && hideOutOfStock) return null;
 
   if (isMobile) {
-    return <ItemMobile product={info} />;
+    return (
+      <ItemMobile product={info} removeItem={removeItem} loading={loading} />
+    );
   }
 
-  return <ItemDesktop nameOG={name} loading={loading} product={info} />;
+  return (
+    <ItemDesktop
+      nameOG={name}
+      loading={loading}
+      product={info}
+      removeItem={removeItem}
+    />
+  );
 };
 
 export default Item;

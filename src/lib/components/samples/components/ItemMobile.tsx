@@ -11,18 +11,25 @@ import {
   Link,
   useDisclosure,
   Text,
+  IconButton,
+  Spinner,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { Product } from "../Item";
 import ImagesMTG from "./ImagesMTG";
+import { AiOutlineDelete } from "react-icons/ai";
 
 type Props = {
   product: Product;
+  loading: boolean;
+  removeItem: (text: string) => void;
 };
 
-const ItemMobile = ({ product }: Props) => {
+const ItemMobile = ({ product, removeItem, loading }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { name, avail, lowestPrice, lowestHref, imageId } = product;
+
+  if (loading) return <Spinner />;
 
   return (
     <>
@@ -42,11 +49,23 @@ const ItemMobile = ({ product }: Props) => {
           >
             <u>{name}</u>
           </Link>
-          <Flex flexDirection="column" mt="auto" gap={2}>
-            <Text color={!avail ? "red.300" : "green.300"}>{avail} pc</Text>
-            <Button onClick={onOpen} variant="link" justifyContent="start">
-              <u>{!lowestPrice ? "No price" : `~ ${lowestPrice} kr`}</u>
-            </Button>
+          <Flex mt="auto" justifyContent="space-between">
+            <Flex flexDirection="column" gap={2}>
+              <Text color={!avail ? "red.300" : "green.300"}>{avail} pc</Text>
+              <Button onClick={onOpen} variant="link" justifyContent="start">
+                <u>{!lowestPrice ? "No price" : `~ ${lowestPrice} kr`}</u>
+              </Button>
+            </Flex>
+            <Flex>
+              <IconButton
+                mt="auto"
+                variant="ghost"
+                aria-label="Removes item from list"
+                icon={<AiOutlineDelete />}
+                onClick={() => removeItem(name)}
+                onKeyUp={(e) => e.key === "Enter" && removeItem(name)}
+              />
+            </Flex>
           </Flex>
         </Flex>
         <Flex width="50%" position="relative" rounded="full">

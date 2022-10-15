@@ -18,8 +18,9 @@ import {
   Tr,
   Td,
   useDisclosure,
+  IconButton,
 } from "@chakra-ui/react";
-import { AiOutlineCamera } from "react-icons/ai";
+import { AiOutlineCamera, AiOutlineDelete } from "react-icons/ai";
 import dayjs from "dayjs";
 import { Product } from "../Item";
 import ImagesMTG from "./ImagesMTG";
@@ -28,9 +29,10 @@ type Props = {
   nameOG: string;
   loading: boolean;
   product: Product;
+  removeItem: (name: string) => void;
 };
 
-const ItemDesktop = ({ nameOG, loading, product }: Props) => {
+const ItemDesktop = ({ nameOG, loading, product, removeItem }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { name, avail, lowestPrice, lowestHref, imageId, totalSearches } =
     product;
@@ -46,6 +48,7 @@ const ItemDesktop = ({ nameOG, loading, product }: Props) => {
             <Td>
               <Spinner />
             </Td>
+            <Td />
             <Td />
           </>
         ) : (
@@ -82,6 +85,16 @@ const ItemDesktop = ({ nameOG, loading, product }: Props) => {
               <Button onClick={onOpen} variant="link">
                 <u>{!lowestPrice ? "Not set" : `~ ${lowestPrice} kr`}</u>
               </Button>
+            </Td>
+            <Td isNumeric>
+              {" "}
+              <IconButton
+                onClick={() => removeItem(name)}
+                onKeyUp={(e) => e.key === "Enter" && removeItem(name)}
+                icon={<AiOutlineDelete />}
+                size="xs"
+                aria-label="Remove item from list"
+              />
             </Td>
           </>
         )}
