@@ -1,4 +1,5 @@
-import { Box, Flex, Heading, Link } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link as LinkChakra } from "@chakra-ui/react";
+import Link from "next/link";
 
 import ThemeToggle from "./ThemeToggle";
 
@@ -10,13 +11,13 @@ const Header = () => {
           <Link href="/">Singles MTG</Link>
         </Heading>
         <Heading as="h2" size={["xs", "xs", "md"]}>
-          <Link
+          <LinkChakra
             href="https://dragonslair.se/"
             isExternal
             rel="noopener noreferrer"
           >
             <u>Dragonslair.se</u>
-          </Link>{" "}
+          </LinkChakra>{" "}
           stock and prices.
         </Heading>
       </Flex>

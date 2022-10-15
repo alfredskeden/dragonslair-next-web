@@ -2,7 +2,6 @@ import {
   Divider,
   Flex,
   Input,
-  Link,
   Popover,
   PopoverAnchor,
   PopoverBody,
@@ -124,7 +123,7 @@ const InputField = ({ onSetValue }: Props) => {
                               </Flex>
                             }
                           >
-                            <Link>{row.Name}</Link>
+                            <Text>{row.Name}</Text>
                           </Tooltip>
                         </Flex>
                         <Flex gap={2}>

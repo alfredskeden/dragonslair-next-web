@@ -8,7 +8,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalFooter,
-  Link,
   useDisclosure,
   Text,
   IconButton,
@@ -18,6 +17,7 @@ import dayjs from "dayjs";
 import { Product } from "../Item";
 import ImagesMTG from "./ImagesMTG";
 import { AiOutlineDelete } from "react-icons/ai";
+import LinksMTG from "./LinksMTG";
 
 type Props = {
   product: Product;
@@ -42,13 +42,12 @@ const ItemMobile = ({ product, removeItem, loading }: Props) => {
         gap={2}
       >
         <Flex flexDirection="column" width="50%">
-          <Link
-            href={`https://dragonslair.se${lowestHref}`}
-            isExternal
-            rel="noopener noreferrer"
-          >
-            <u>{name}</u>
-          </Link>
+          <LinksMTG
+            href={lowestHref ?? ""}
+            label={name}
+            isExternal={true}
+            mobile={true}
+          />
           <Flex mt="auto" justifyContent="space-between">
             <Flex flexDirection="column" gap={2}>
               <Text color={!avail ? "red.300" : "green.300"}>{avail} pc</Text>
@@ -82,13 +81,12 @@ const ItemMobile = ({ product, removeItem, loading }: Props) => {
               return (
                 <Flex key={item.id} padding={5}>
                   <Flex flexDirection="column" width="50%">
-                    <Link
-                      href={`https://dragonslair.se${item.URL}`}
-                      isExternal
-                      rel="noopener noreferrer"
-                    >
-                      <u>{item.name}</u>
-                    </Link>
+                    <LinksMTG
+                      href={item.URL}
+                      label={item.name}
+                      isExternal={true}
+                      mobile={true}
+                    />
                     <Flex flexDirection="column" mt="auto" gap={2}>
                       <Text color={!item.itemsAvail ? "red.300" : "green.300"}>
                         {item.itemsAvail} pc
