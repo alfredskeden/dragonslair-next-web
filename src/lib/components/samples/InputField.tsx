@@ -69,6 +69,16 @@ const InputField = ({ onSetValue }: Props) => {
     getSearchInfo();
   }, [debouncedValue]);
 
+  const addItem = (name: string) => {
+    onSetValue(name);
+    setValue("");
+    toast({
+      title: `${name} Added`,
+      status: "success",
+      duration: 1000,
+    });
+  };
+
   return (
     <Flex flexDirection="column" alignItems="center">
       <Popover
@@ -94,7 +104,13 @@ const InputField = ({ onSetValue }: Props) => {
                 allRows.map((row) => {
                   return (
                     <Flex key={row.Id} flexDirection="column" gap={2}>
-                      <Flex justifyContent="space-between" gap={8}>
+                      <Flex
+                        justifyContent="space-between"
+                        gap={8}
+                        tabIndex={0}
+                        onClick={() => addItem(row.Name)}
+                        onKeyUp={(e) => e.key === "Enter" && addItem(row.Name)}
+                      >
                         <Flex gap={2}>
                           <Tooltip
                             hasArrow
@@ -108,19 +124,7 @@ const InputField = ({ onSetValue }: Props) => {
                               </Flex>
                             }
                           >
-                            <Link
-                              onClick={() => {
-                                onSetValue(row.Name);
-                                setValue("");
-                                toast({
-                                  title: `${row.Name} Added`,
-                                  status: "success",
-                                  duration: 1000,
-                                });
-                              }}
-                            >
-                              <u>{row.Name}</u>
-                            </Link>
+                            <Link>{row.Name}</Link>
                           </Tooltip>
                         </Flex>
                         <Flex gap={2}>
