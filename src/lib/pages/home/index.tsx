@@ -33,6 +33,7 @@ const headers: Array<TableHeader> = [
   { label: "Name" },
   { label: "Stock", isNumeric: true },
   { label: "Price", isNumeric: true },
+  { label: "", isNumeric: true },
 ];
 
 const Home = () => {
@@ -41,7 +42,13 @@ const Home = () => {
   const [isMobile] = useMediaQuery("(max-width: 669px)");
 
   const addSingleSearchValue = (text: string) => {
-    setSavedValue((r) => [...r, text]);
+    if (!savedValue.includes(text)) {
+      setSavedValue((r) => [...r, text]);
+    }
+  };
+
+  const removeItem = (name: string) => {
+    setSavedValue((r) => [...r.filter((x) => x !== name)]);
   };
 
   return (
@@ -93,6 +100,7 @@ const Home = () => {
                       name={value}
                       key={`${value}-item`}
                       hideOutOfStock={hideOutOfStock}
+                      removeItem={removeItem}
                     />
                   );
                 })
@@ -101,6 +109,7 @@ const Home = () => {
                   <Td />
                   <Td />
                   <Td>Please search for items above.</Td>
+                  <Td />
                   <Td />
                   <Td />
                 </Tr>
@@ -133,6 +142,7 @@ const Home = () => {
                   key={`${value}-item-mobile`}
                   hideOutOfStock={hideOutOfStock}
                   isMobile={isMobile}
+                  removeItem={removeItem}
                 />
               );
             })
