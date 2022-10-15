@@ -46,7 +46,7 @@ const Home = () => {
 
   return (
     <Flex direction="column" minHeight="80vh" gap={4}>
-      <NextSeo title="Dragonslair.se stock and prices" />
+      <NextSeo title="Singles MTG | dragonslair.se stock and prices" />
       <Tabs variant="enclosed">
         <TabList>
           <Tab>Single search</Tab>
