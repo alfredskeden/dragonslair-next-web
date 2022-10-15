@@ -58,7 +58,10 @@ const InputField = ({ onSetValue }: Props) => {
 
       const rows =
         infoResponse.data.response.rows?.filter((row) => {
-          return row.Tags?.some((x) => x === "magic");
+          return (
+            row.Tags?.some((x) => x === "magic") &&
+            row.Tags?.some((s) => s === "card-singles")
+          );
         }) ?? [];
 
       setAllRows(rows);

@@ -63,8 +63,10 @@ const Item = ({
 
       const rows =
         infoResponse.data.response.rows
-          ?.filter((x: RowsEntity) =>
-            x.Tags?.some((s: string) => s === "magic")
+          ?.filter(
+            (x: RowsEntity) =>
+              x.Tags?.some((s: string) => s === "magic") &&
+              x.Tags?.some((s: string) => s === "card-singles")
           )
           .sort(
             (a: RowsEntity, b: RowsEntity) => b.Popularity - a.Popularity
