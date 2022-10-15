@@ -1,6 +1,6 @@
 /** @type {import('next-seo').DefaultSeoProps} */
 const defaultSEOConfig = {
-  title: "Dragonslair.se stock and prices",
+  title: "Singles MTG | dragonslair.se stock and prices",
   titleTemplate: "%s",
   defaultTitle: "Scanner",
   description:
