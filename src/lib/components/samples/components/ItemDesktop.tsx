@@ -1,7 +1,6 @@
 import {
   Button,
   Flex,
-  Link,
   Modal,
   ModalContent,
   ModalFooter,
@@ -24,6 +23,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import dayjs from "dayjs";
 import { Product } from "../Item";
 import ImagesMTG from "./ImagesMTG";
+import LinksMTG from "./LinksMTG";
 
 type Props = {
   nameOG: string;
@@ -75,13 +75,11 @@ const ItemDesktop = ({ nameOG, loading, product, removeItem }: Props) => {
               </Tooltip>
             </Td>
             <Td>
-              <Link
-                href={`https://dragonslair.se${lowestHref}`}
-                isExternal
-                rel="noopener noreferrer"
-              >
-                <u>{name}</u>
-              </Link>
+              <LinksMTG
+                href={lowestHref ?? ""}
+                label={name}
+                isExternal={true}
+              />
             </Td>
             <Td isNumeric>
               <Text color={!avail ? "red.300" : "green.300"}>{avail} pc</Text>
@@ -148,13 +146,11 @@ const ItemDesktop = ({ nameOG, loading, product, removeItem }: Props) => {
                         </Tooltip>
                       </Td>
                       <Td>
-                        <Link
-                          href={`https://dragonslair.se${item.URL}`}
-                          isExternal
-                          rel="noopener noreferrer"
-                        >
-                          <u>{item.name}</u>
-                        </Link>
+                        <LinksMTG
+                          href={item.URL}
+                          label={item.name}
+                          isExternal={true}
+                        />
                       </Td>
                       <Td isNumeric>
                         <Text

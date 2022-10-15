@@ -31,8 +31,8 @@ const headers: Array<TableHeader> = [
   { label: "(rows)" },
   { label: "img" },
   { label: "Name" },
-  { label: "Stock", isNumeric: true },
-  { label: "Price", isNumeric: true },
+  { label: "Stocks", isNumeric: true },
+  { label: "Prices", isNumeric: true },
   { label: "", isNumeric: true },
 ];
 
