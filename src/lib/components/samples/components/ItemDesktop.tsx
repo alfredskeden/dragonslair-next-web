@@ -20,7 +20,7 @@ import {
   useDisclosure,
   IconButton,
 } from "@chakra-ui/react";
-import { AiOutlineCamera, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import dayjs from "dayjs";
 import { Product } from "../Item";
 import ImagesMTG from "./ImagesMTG";
@@ -64,8 +64,13 @@ const ItemDesktop = ({ nameOG, loading, product, removeItem }: Props) => {
                   </Flex>
                 }
               >
-                <Flex>
-                  <AiOutlineCamera />
+                <Flex position="relative" height="30px">
+                  <ImagesMTG
+                    name={name}
+                    imageId={imageId}
+                    type="grid"
+                    foil={false}
+                  />
                 </Flex>
               </Tooltip>
             </Td>
@@ -132,8 +137,13 @@ const ItemDesktop = ({ nameOG, loading, product, removeItem }: Props) => {
                             </Flex>
                           }
                         >
-                          <Flex>
-                            <AiOutlineCamera />
+                          <Flex position="relative" height="30px">
+                            <ImagesMTG
+                              name={item.name}
+                              imageId={item.imageId}
+                              type="grid"
+                              foil={false}
+                            />
                           </Flex>
                         </Tooltip>
                       </Td>
