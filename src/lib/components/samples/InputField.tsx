@@ -12,10 +12,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { DragonLairApi, RowsEntity } from "lib/types/dragonlair-api";
+import { DragonLairApi, RowsEntity, Response } from "lib/types/dragonlair-api";
 import { ChangeEvent, useEffect, useState } from "react";
 import useDebounce from "../../../../hooks/useDebounce";
 import ImagesMTG from "./components/ImagesMTG";
+import LinksMTG from "./components/LinksMTG";
 
 type Props = {
   onSetValue: (text: string) => void;
@@ -23,6 +24,7 @@ type Props = {
 
 const InputField = ({ onSetValue }: Props) => {
   const [value, setValue] = useState<string>("");
+  const [response, setResponse] = useState<Response>();
   const [allRows, setAllRows] = useState<Array<RowsEntity>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const debouncedValue = useDebounce<string>(value, 500);
@@ -33,7 +35,6 @@ const InputField = ({ onSetValue }: Props) => {
     setValue(event.target.value);
   };
 
-  // Fetch API (optional)
   useEffect(() => {
     if (!debouncedValue || debouncedValue.length < 3) {
       setAllRows([]);
@@ -65,6 +66,7 @@ const InputField = ({ onSetValue }: Props) => {
         }) ?? [];
 
       setAllRows(rows);
+      setResponse(infoResponse.data.response);
       setLoading(false);
     }
 
@@ -90,7 +92,7 @@ const InputField = ({ onSetValue }: Props) => {
       >
         <PopoverAnchor>
           <Input
-            width={"100%"}
+            width="100%"
             placeholder="Search singles"
             onChange={handleChange}
             value={value}
@@ -98,10 +100,20 @@ const InputField = ({ onSetValue }: Props) => {
           />
         </PopoverAnchor>
         <PopoverContent boxSize="fit-content">
-          <PopoverBody>
+          <PopoverBody maxWidth="83vw">
             <Flex flexDirection="column" justifyContent="start">
               {loading && <Spinner />}
               {!allRows || (!allRows.length && <Text>No products found</Text>)}
+              {(response?.total ?? 0) > 10 && (
+                <Flex gap={2} flexDirection="column">
+                  <Text color="orange.300">
+                    Notice there are more than 10 products returned. I can only
+                    see 10 of them. <br />
+                    Use search for all if you want to see full result.
+                  </Text>
+                  <Divider />
+                </Flex>
+              )}
               {allRows.length > 0 &&
                 allRows.map((row) => {
                   return (
@@ -146,6 +158,13 @@ const InputField = ({ onSetValue }: Props) => {
                     </Flex>
                   );
                 })}
+              <Flex flexDirection="column" justifyItems="center">
+                <LinksMTG
+                  href={response?.url ?? ""}
+                  isExternal={true}
+                  label={`View all (${response?.total})`}
+                />
+              </Flex>
             </Flex>
           </PopoverBody>
         </PopoverContent>
