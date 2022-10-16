@@ -10,7 +10,8 @@ type ItemProps = {
   name: string;
   hideOutOfStock: boolean;
   isMobile?: boolean;
-  removeItem: (name: string) => void;
+  index: number;
+  removeItem: (index: number) => void;
 };
 
 export type Product = {
@@ -38,6 +39,7 @@ const Item = ({
   name,
   hideOutOfStock,
   isMobile = false,
+  index,
   removeItem,
 }: ItemProps) => {
   const [info, setInfo] = useState<Product>({ name });
@@ -84,7 +86,7 @@ const Item = ({
         lowestHref: url,
         lowestPrice: rows[0].Price,
         name: rows[0].Name,
-        totalSearches: rows.length,
+        totalSearches: infoResponse.data.response.total,
         imageId: rows[0].ImageId,
         items: rows.map((row: RowsEntity) => {
           return {
@@ -109,7 +111,12 @@ const Item = ({
 
   if (isMobile) {
     return (
-      <ItemMobile product={info} removeItem={removeItem} loading={loading} />
+      <ItemMobile
+        product={info}
+        loading={loading}
+        index={index}
+        removeItem={removeItem}
+      />
     );
   }
 
@@ -118,6 +125,7 @@ const Item = ({
       nameOG={name}
       loading={loading}
       product={info}
+      index={index}
       removeItem={removeItem}
     />
   );

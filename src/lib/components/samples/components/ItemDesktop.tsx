@@ -29,10 +29,17 @@ type Props = {
   nameOG: string;
   loading: boolean;
   product: Product;
-  removeItem: (name: string) => void;
+  index: number;
+  removeItem: (index: number) => void;
 };
 
-const ItemDesktop = ({ nameOG, loading, product, removeItem }: Props) => {
+const ItemDesktop = ({
+  nameOG,
+  loading,
+  product,
+  index,
+  removeItem,
+}: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { name, avail, lowestPrice, lowestHref, imageId, totalSearches } =
     product;
@@ -92,8 +99,8 @@ const ItemDesktop = ({ nameOG, loading, product, removeItem }: Props) => {
             <Td isNumeric>
               {" "}
               <IconButton
-                onClick={() => removeItem(name)}
-                onKeyUp={(e) => e.key === "Enter" && removeItem(name)}
+                onClick={() => removeItem(index)}
+                onKeyUp={(e) => e.key === "Enter" && removeItem(index)}
                 icon={<AiOutlineDelete />}
                 size="xs"
                 aria-label="Remove item from list"
@@ -121,7 +128,7 @@ const ItemDesktop = ({ nameOG, loading, product, removeItem }: Props) => {
               <Tbody>
                 {product.items?.map((item) => {
                   return (
-                    <Tr key={item.name}>
+                    <Tr key={item.id}>
                       <Td>
                         <Tooltip
                           placement="auto"

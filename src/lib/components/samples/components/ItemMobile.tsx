@@ -22,10 +22,11 @@ import LinksMTG from "./LinksMTG";
 type Props = {
   product: Product;
   loading: boolean;
-  removeItem: (text: string) => void;
+  index: number;
+  removeItem: (index: number) => void;
 };
 
-const ItemMobile = ({ product, removeItem, loading }: Props) => {
+const ItemMobile = ({ product, loading, index, removeItem }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { name, avail, lowestPrice, lowestHref, imageId } = product;
 
@@ -61,8 +62,8 @@ const ItemMobile = ({ product, removeItem, loading }: Props) => {
                 variant="ghost"
                 aria-label="Removes item from list"
                 icon={<AiOutlineDelete />}
-                onClick={() => removeItem(name)}
-                onKeyUp={(e) => e.key === "Enter" && removeItem(name)}
+                onClick={() => removeItem(index)}
+                onKeyUp={(e) => e.key === "Enter" && removeItem(index)}
               />
             </Flex>
           </Flex>
