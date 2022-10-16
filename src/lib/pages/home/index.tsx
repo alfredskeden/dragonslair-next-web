@@ -47,8 +47,11 @@ const Home = () => {
     }
   };
 
-  const removeItem = (name: string) => {
-    setSavedValue((r) => [...r.filter((x) => x !== name)]);
+  const removeItem = (index: number) => {
+    setSavedValue((r) => {
+      r.splice(index, 1);
+      return [...r];
+    });
   };
 
   return (
@@ -93,13 +96,14 @@ const Home = () => {
             </Thead>
             <Tbody>
               {savedValue.length > 0 ? (
-                savedValue.map((value) => {
+                savedValue.map((value, index) => {
                   if (!value) return null;
                   return (
                     <Item
                       name={value}
                       key={`${value}-item`}
                       hideOutOfStock={hideOutOfStock}
+                      index={index}
                       removeItem={removeItem}
                     />
                   );
@@ -134,7 +138,7 @@ const Home = () => {
       ) : (
         <>
           {savedValue.length > 0 && savedValue[0] !== "" ? (
-            savedValue.map((value) => {
+            savedValue.map((value, index) => {
               if (!value) return null;
               return (
                 <Item
@@ -142,6 +146,7 @@ const Home = () => {
                   key={`${value}-item-mobile`}
                   hideOutOfStock={hideOutOfStock}
                   isMobile={isMobile}
+                  index={index}
                   removeItem={removeItem}
                 />
               );
